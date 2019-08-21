@@ -1,6 +1,7 @@
 <?php
 $name=$_POST["name"];
 $safe=$_POST["safety"];
+$rid=$_POST["rid"];
 include("../includes/con.php");
 if($safe!="safe"){
 	echo "shit!";
@@ -26,7 +27,7 @@ if($safe!="safe"){
 						<p><b>$uname</b><br />$sex<br />$uschool</p>
 					</div>
 					<div class='card-action'>
-						<a href='/actions/invite_partner.php?uid=$uid' class='btn-flat waves-effect'>邀请</a>
+						<a href='/actions/invite_partner.php?action=invite&uid=$uid&rid=$rid' class='btn-flat waves-effect'>邀请</a>
 					</div>
 				</div>
 			</div>

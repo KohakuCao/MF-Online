@@ -64,4 +64,22 @@ function getSeatInfo($x,$y){
 function showPayImage(){
 	
 }
+
+function getInviteInfo($x){
+	global $con;
+	$rid=intval($x);
+	$query="SELECT * FROM `invites` WHERE `torid`=$rid AND `state`='pending'";
+	$res=mysqli_query($con,$query);
+	if(mysqli_num_rows($res)>=1){
+		$temp=0;
+		while($row=mysqli_fetch_array($res)){
+			$rows[$temp]=$row;
+			$temp+=1;
+		}
+		return $rows;
+	}else{
+		return false;
+	}
+	
+}
 ?>

@@ -43,7 +43,19 @@ $seat=getSeatInfo($uid,$committee["id"]);
 		<div class="container">
 			<ul class="collapsible popout expandable">
 				<li>
-					<div class="collapsible-header"><i class="material-icons">people</i>搭档</div>
+					<div class="collapsible-header"><i class="material-icons">people</i>搭档<?php
+						if($reg["type"]=="del"&&$reg["partner"]==-1&&$committee["seattype"]=="double"){
+							$invite=getInviteInfo($rid);
+							if($invite!=false){
+								$num_of_invites=count($invite);
+								echo "<span class='new badge red' data-badge-caption='邀请'>$num_of_invites</span>";
+							}else{
+								echo "<span class='new badge red' data-badge-caption='没有搭档'>!</span>";
+							}
+							
+						}
+						
+						?></div>
 					<div class="collapsible-body">
 						<?php
 						if($reg["type"]=="del"){
@@ -51,7 +63,16 @@ $seat=getSeatInfo($uid,$committee["id"]);
 								echo "您申请的委员会是单代表制，无需搭档。";
 							}elseif($committee["seattype"]=="double"){
 								if($reg["partner"] == -1){
-									echo "<p>您还没有搭档。</p><a href='/partner.php?rid=".$reg["rid"]."' class='btn waves-effect'>寻找搭档</a>";
+									echo "<p>您还没有搭档。<br /><a href='/partner.php?rid=".$reg["rid"]."' class='btn waves-effect'>寻找搭档</a><br /></p>";
+									if($invite!=false){
+										$temp=0;
+										while($temp<=count($invite)-1){
+											$inviter=getUserInfo($invite[$temp]["inviter"]);
+											echo "您收到了来自".$inviter["school"]."的".$inviter["real_name"]."的邀请（性别：".$inviter["sex"]."）<a href='/actions/invite_partner.php?action=accept&iid=".$invite[$temp]["id"]."' class='btn waves-effect'>接受</a><a href='/actions/invite_partner.php?action=reject&iid=".$invite[$temp]["id"]."' class='btn waves-effect red'>拒绝</a><br />";
+											$temp+=1;
+										}
+									}
+									
 								}else{
 									$partner=getUserInfo($reg["partner"]);
 									echo "<p>您的搭档是来自".$partner["school"]."的".$partner["real_name"]."，祝您和您的搭档合作愉快！</p>";
@@ -59,6 +80,7 @@ $seat=getSeatInfo($uid,$committee["id"]);
 							}else{
 								echo "您申请的委员会是特殊代表制，无需搭档。";
 							}
+							
 						}else{
 							echo "您申请的职位无需搭档。";
 						}
